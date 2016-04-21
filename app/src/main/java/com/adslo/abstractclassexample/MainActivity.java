@@ -2,17 +2,22 @@ package com.adslo.abstractclassexample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     ListView lstMain = null;
-    ArrayList lst    =  new <String>ArrayList();;
+    ArrayList lst    =  new <String>ArrayList();
 
     ArrayAdapter adapter = null;
+    private Button btnClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +34,33 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lst);
         lstMain.setAdapter(adapter);
+
+        lstMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // click 했을 때 해당 항목을 삭제 해보자..
+                // removeItem(position); <-- 메소드를 만들어 규현해보자.
+                Toast.makeText(getApplicationContext(), (String)lst.get(position), Toast.LENGTH_LONG ).show();
+            }
+        });
+
+        btnClear = (Button) findViewById(R.id.btnClear);
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearList();
+            }
+        });
+    }
+
+    private void clearList() {
+        lst.clear();
+        adapter.notifyDataSetChanged();
     }
 
     // ListView에 add Item
     public void addListItem(String sMessage){
         lst.add(sMessage);
-
         adapter.notifyDataSetChanged();
     }
 
@@ -63,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
     // 게임에서 필요한 Player
     abstract class Player{
         public void shout(String sMessage){
-            //System.out.println(this.getClass().getName() + ":> " + sMessage);
-
             String sIam = this.getClass().getName();
             sIam = sIam.replace(getPackageName() + ".MainActivity$", "");
 
