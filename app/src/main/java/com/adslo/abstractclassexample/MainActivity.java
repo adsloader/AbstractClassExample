@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initItems() {
-        for(int i =0 ; i < 100; i++){
+        for(int i =0 ; i < 50; i++){
             addListItem(i + ":> 번째 입니다.");
         }
     }
